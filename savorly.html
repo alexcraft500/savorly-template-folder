@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- PAGE SETUP: Update the title, description, and theme color below to match the buyer's brand. -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Savorly | Food Delivery Template</title>
+<meta name="description" content="Hot meals from your favorite local kitchens, delivered to your door.">
+<meta name="theme-color" content="#f26a1b">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- Keep style.css beside this HTML file, or update this path if the stylesheet is moved. -->
+<link rel="stylesheet" href="style.css">
+<!-- This small setup script remembers the visitor's theme; no routine customization is needed here. -->
+<script>
+  document.documentElement.classList.add('js');
+  try { var t = localStorage.getItem('sv-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+</script>
+</head>
+
+<body class="loading">
+
+<!-- DECORATIVE EFFECTS: Progress, pointer ring, and confetti layers. Keep these elements for their matching script effects. -->
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="progress" id="progress" aria-hidden="true"></div>
+<div class="ring" id="ring" aria-hidden="true"><i></i></div>
+
+<!-- LOADING SCREEN: Edit its colors and animation in style.css; keep its IDs for script.js. -->
+<div class="preloader" id="preloader" aria-hidden="true">
+  <div class="pl-panel pl-top"></div>
+  <div class="pl-panel pl-bot"></div>
+  <div class="pl-core">
+    <div class="pl-mark"><svg class="ic"><use href="#i-utensils"/></svg></div>
+    <div class="pl-count"><span id="plNum">0</span>%</div>
+  </div>
+</div>
+
+<!-- ICON LIBRARY: Shared SVG symbols used across the page. Keep symbol IDs unchanged unless updating every reference. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></symbol>
+  <symbol id="i-cart" viewBox="0 0 24 24"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></symbol>
+  <symbol id="i-tag" viewBox="0 0 24 24"><path d="M12.59 2.59A2 2 0 0 0 11.17 2H4a2 2 0 0 0-2 2v7.17a2 2 0 0 0 .59 1.42l8.7 8.7a2 2 0 0 0 2.82 0l7.17-7.17a2 2 0 0 0 0-2.82z"/><circle cx="7.5" cy="7.5" r="1" fill="currentColor"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></symbol>
+  <symbol id="i-clipboard" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></symbol>
+  <symbol id="i-message" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 9h8M8 13h5"/></symbol>
+  <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></symbol>
+  <symbol id="i-truck" viewBox="0 0 24 24"><path d="M1 3h15v13H1zM16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></symbol>
+  <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 0-15-6.7L3 8M3 3v5h5M3 12a9 9 0 0 0 15 6.7L21 16M21 21v-5h-5"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-headset" viewBox="0 0 24 24"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2zM3 15a2 2 0 0 0 2 2h1v-5H5a2 2 0 0 0-2 2z"/><path d="M18 17v1a3 3 0 0 1-3 3h-2"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M8 5v14l11-7z"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></symbol>
+  <symbol id="i-copy" viewBox="0 0 24 24"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></symbol>
+  <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></symbol>
+  <symbol id="i-utensils" viewBox="0 0 24 24"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></symbol>
+  <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></symbol>
+  <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></symbol>
+  <symbol id="i-whatsapp" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></symbol>
+  <symbol id="i-twitter" viewBox="0 0 24 24"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></symbol>
+</svg>
+
+<noscript><p style="padding:24px;font-family:sans-serif">This template needs JavaScript enabled.</p></noscript>
+
+<!-- HEADER: CONFIG.brand in script.js updates the brand text. Search, theme, favorites, cart, and account controls are script-powered. -->
+<header class="topbar" id="topbar">
+  <a href="#home" class="brand" aria-label="Home">
+    <span class="brand__mark"><svg class="ic"><use href="#i-utensils"/></svg></span>
+    <span class="brand__name" data-brand>Savorly</span>
+  </a>
+
+  <form class="search" id="searchForm" role="search" autocomplete="off">
+    <label class="sr" for="q">Search dishes</label>
+    <svg class="ic search__ic"><use href="#i-search"/></svg>
+    <input id="q" type="search" placeholder="Search dishes or cuisines" aria-controls="suggest" aria-expanded="false">
+    <button class="search__go" type="submit" aria-label="Search"><svg class="ic"><use href="#i-search"/></svg></button>
+    <ul class="suggest" id="suggest" role="listbox" hidden></ul>
+  </form>
+
+  <div class="actions">
+    <button class="act" id="themeBtn" type="button" aria-label="Switch color theme"><svg class="ic"><use href="#i-moon"/></svg><span>Theme</span></button>
+    <button class="act" id="favBtn" type="button" aria-label="Show favorites"><svg class="ic"><use href="#i-heart"/></svg><span>Favorites</span><i class="badge" id="favCount" data-n="0">0</i></button>
+    <button class="act" id="cartBtn" type="button" aria-label="Open cart"><svg class="ic"><use href="#i-cart"/></svg><span>Cart</span><i class="badge" data-cart-count data-n="0">0</i></button>
+    <button class="act" id="accBtn" type="button" aria-label="Account"><svg class="ic"><use href="#i-user"/></svg><span>Account</span></button>
+  </div>
+</header>
+
+<!-- MAIN NAVIGATION: Edit labels and href destinations to match the buyer's pages. Keep data-spy values aligned with section IDs. -->
+<aside class="sidebar" id="sidebar">
+  <nav class="side-nav" id="sideNav" aria-label="Main">
+    <span class="side-ind" id="sideInd"></span>
+    <a href="#home" data-spy="home" style="--n:0"><svg class="ic"><use href="#i-home"/></svg>Home</a>
+    <a href="#menu" data-spy="menu" style="--n:1"><svg class="ic"><use href="#i-book"/></svg>Menu</a>
+    <a href="#categories" data-spy="categories" style="--n:2"><svg class="ic"><use href="#i-grid"/></svg>Categories</a>
+    <a href="#offers" data-spy="offers" style="--n:3"><svg class="ic"><use href="#i-tag"/></svg>Offers</a>
+    <!-- SAMPLE LINKS: Add a real href (for example href="#reservations" or href="orders.html") before publishing these items. -->
+    <a style="--n:4"><svg class="ic"><use href="#i-calendar"/></svg>Reservations</a>
+    <a style="--n:5"><svg class="ic"><use href="#i-clipboard"/></svg>Orders</a>
+    <a style="--n:6"><svg class="ic"><use href="#i-message"/></svg>Reviews</a>
+    <a href="#support" data-spy="support" style="--n:7"><svg class="ic"><use href="#i-help"/></svg>Support</a>
+  </nav>
+  <div class="side-promo" data-reveal="up">
+    <strong>Get 25% off</strong>
+    <span>on your first order</span>
+    <a class="btn btn--primary btn--sm" href="#offers">Order now</a>
+    <div class="side-promo__img" data-ph="Promo image" data-src="images/burger.jpg"></div>
+  </div>
+</aside>
+
+<!-- MOBILE NAVIGATION: Edit these labels and destinations to match the main navigation above. Keep the cart button ID intact. -->
+<nav class="bottom-nav" id="bottomNav" aria-label="Quick navigation">
+  <a href="#home" data-spy="home"><svg class="ic"><use href="#i-home"/></svg><span>Home</span></a>
+  <a href="#menu" data-spy="menu"><svg class="ic"><use href="#i-book"/></svg><span>Menu</span></a>
+  <a href="#categories" data-spy="categories"><svg class="ic"><use href="#i-grid"/></svg><span>Cuisines</span></a>
+  <a href="#offers" data-spy="offers"><svg class="ic"><use href="#i-tag"/></svg><span>Offers</span></a>
+  <button type="button" id="bottomCart"><svg class="ic"><use href="#i-cart"/></svg><span>Cart</span><i class="badge" data-cart-count data-n="0">0</i></button>
+</nav>
+
+<!-- PAGE CONTENT: Most copy and photos come from the arrays near the top of script.js; update those arrays to customize the store. -->
+<!-- MAIN PAGE WRAPPER: Contains the hero, service benefits, cuisine categories, menu, offers, and partner strip. -->
+<main class="main">
+  <div class="wrap">
+
+    <!-- HERO CAROUSEL: Edit SLIDES in script.js for headings, copy, prices, and images. Keep this container and its IDs. -->
+    <section class="hero" id="home" aria-roledescription="carousel" aria-label="Featured meals">
+      <span class="hero__blob hero__blob--a"></span>
+      <span class="hero__blob hero__blob--b"></span>
+      <div class="slides" id="slides" aria-live="polite"></div>
+      <div class="hero-nav">
+        <button type="button" class="round-btn" id="prev" aria-label="Previous slide"><svg class="ic"><use href="#i-left"/></svg></button>
+        <div class="dots" id="dots"></div>
+        <button type="button" class="round-btn" id="next" aria-label="Next slide"><svg class="ic"><use href="#i-right"/></svg></button>
+      </div>
+    </section>
+
+    <!-- BENEFITS: Edit FEATURES in script.js to change these four service highlights. -->
+    <div class="features" id="features"></div>
+
+    <!-- CUISINES: Edit CUISINES in script.js. Each cuisine ID should match the cuisine value on related DISHES. -->
+    <!-- CATEGORY SECTION: JavaScript creates the category cards inside #cuisineRow. -->
+    <section id="categories">
+      <div class="sec-head" data-reveal="up">
+        <h2>Pick a cuisine</h2>
+        <button type="button" class="link-all" id="clearCuisine">Show all <svg class="ic"><use href="#i-arrow"/></svg></button>
+      </div>
+      <div class="cuisine-row" id="cuisineRow"></div>
+    </section>
+
+    <!-- MENU: Edit DISHES in script.js to change item names, descriptions, prices, categories, offers, and image filenames. -->
+    <!-- MENU SECTION: JavaScript generates dish cards inside #dishGrid and filter controls inside #filterBar. -->
+    <section id="menu">
+      <div class="sec-head" data-reveal="up">
+        <h2>Customer favorites</h2>
+        <button type="button" class="link-all" id="viewAll">See all <svg class="ic"><use href="#i-arrow"/></svg></button>
+      </div>
+      <div class="filter-bar" id="filterBar" hidden></div>
+      <div class="dishes" id="dishGrid"></div>
+    </section>
+
+    <!-- OFFERS: Update this sample promotional copy here. Replace each data-src with an image path from the images folder. -->
+    <!-- PROMOTIONS: Edit the visible headline/body text here; promo code and countdown are also managed by script.js. -->
+    <section class="promos" id="offers">
+      <article class="promo promo--green" data-reveal="left">
+        <span class="pill"><svg class="ic"><use href="#i-tag"/></svg>Limited-time offer</span>
+        <h3>25% off your first order</h3>
+        <p>Use this code at checkout and enjoy a tasty welcome.</p>
+        <div class="code-row">
+          <div class="code"><span id="promoCode">WELCOME25</span><button type="button" class="copy" id="copyCode" aria-label="Copy code"><svg class="ic"><use href="#i-copy"/></svg></button></div>
+          <div class="count" id="countdown" role="timer" aria-label="Time left on the offer"></div>
+        </div>
+        <a class="btn btn--dark" href="#menu" data-magnetic>Order now <i class="btn__dot"><svg class="ic"><use href="#i-arrow"/></svg></i></a>
+        <div class="promo__img" data-ph="Offer image" data-src="images/pizza.jpg" data-parallax="0.09"></div>
+      </article>
+
+      <article class="promo promo--peach" data-reveal="right">
+        <span class="pill pill--o"><svg class="ic"><use href="#i-calendar"/></svg>This weekend</span>
+        <h3>Family combo boxes</h3>
+        <p>Mains, sides and drinks for the whole table in one easy order.</p>
+        <a class="btn btn--primary" href="#menu" data-magnetic>Order now <i class="btn__dot"><svg class="ic"><use href="#i-arrow"/></svg></i></a>
+        <div class="promo__img" data-ph="Combo image" data-src="images/salad-bowl.jpg" data-parallax="-0.09"></div>
+      </article>
+    </section>
+
+    <!-- PARTNERS: Edit PARTNERS in script.js to change the names shown in this scrollable strip. -->
+    <!-- PARTNER STRIP: Partner labels are generated from the PARTNERS array in script.js. -->
+    <section class="partners" data-reveal="up" aria-label="Featured partners">
+      <p>Loved by local kitchens</p>
+      <div class="marquee" tabindex="0" role="region" aria-label="Featured partner restaurants; scroll horizontally"><div class="marquee__track" id="marq"></div></div>
+    </section>
+
+  </div>
+</main>
+
+<!-- FOOTER: Replace the sample description and labels. Add destination hrefs to navigation/social links before publishing. -->
+<!-- SITE FOOTER: Replace demo business details, social URLs, and any placeholder navigation links before launch. -->
+<footer class="footer" id="support">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand" data-reveal="up">
+        <a href="#home" class="brand"><span class="brand__mark"><svg class="ic"><use href="#i-utensils"/></svg></span><span class="brand__name" data-brand>Savorly</span></a>
+        <p>Hot meals from your favorite local kitchens, delivered to your door.</p>
+        <div class="social">
+          <!-- Add each business profile URL as an href, e.g. href="https://facebook.com/your-page". -->
+          <a aria-label="Facebook"><svg class="ic"><use href="#i-facebook"/></svg></a>
+          <a aria-label="Instagram"><svg class="ic"><use href="#i-instagram"/></svg></a>
+          <a aria-label="Twitter"><svg class="ic"><use href="#i-twitter"/></svg></a>
+          <a data-wa class="social__wa" target="_blank" rel="noopener" aria-label="Chat on WhatsApp"><svg class="ic"><use href="#i-whatsapp"/></svg></a>
+        </div>
+      </div>
+      <!-- Add href destinations to each footer link; these sample links are labels only. -->
+      <nav data-reveal="up" style="--rd:80" aria-label="Company">
+        <h4>Company</h4>
+        <a>Our story</a><a>Join the team</a><a>Stories</a><a>Press kit</a><a>Get in touch</a>
+      </nav>
+      <nav data-reveal="up" style="--rd:160" aria-label="Support">
+        <h4>Support</h4>
+        <a>Help center</a><a>Track an order</a><a>Refunds</a><a>Delivery areas</a><a>FAQs</a>
+      </nav>
+      <nav data-reveal="up" style="--rd:240" aria-label="Legal">
+        <h4>Legal</h4>
+        <a>Terms of use</a><a>Privacy policy</a><a>Cookie settings</a><a>Refund policy</a>
+      </nav>
+      <!-- DEMO NEWSLETTER: The form validates and shows a confirmation locally; connect a mailing-list service for real subscriptions. -->
+      <!-- FRONT-END NEWSLETTER DEMO: Add a real mailing-list integration if signups must be stored or emailed. -->
+      <form class="news" id="newsletter" data-reveal="up" style="--rd:320" novalidate>
+        <h4>Weekly deals</h4>
+        <p>Get new offers in your inbox every Friday.</p>
+        <div class="news__row">
+          <label class="sr" for="nlEmail">Email address</label>
+          <input id="nlEmail" type="email" placeholder="you@example.com" autocomplete="email">
+          <button class="btn btn--primary btn--sm" type="submit">Join</button>
+        </div>
+      </form>
+    </div>
+    <div class="foot-base">
+      <p>&copy; <span id="year">2026</span> <span data-brand>Savorly</span>. All rights reserved.</p>
+      <p><a>Privacy</a><a>Terms</a><a>Sitemap</a></p>
+    </div>
+  </div>
+</footer>
+
+<!-- CART DRAWER: Items and totals are generated by script.js. Keep these IDs and data hooks for cart controls. -->
+<div class="scrim" id="scrim"></div>
+<!-- CART DRAWER: This is a browser-side demo cart; checkout is not connected to payment or order services. -->
+<aside class="drawer" id="drawer" aria-label="Your cart" aria-hidden="true">
+  <div class="drawer__head">
+    <h2>Your cart</h2>
+    <button type="button" class="round-btn" id="closeCart" aria-label="Close cart"><svg class="ic"><use href="#i-x"/></svg></button>
+  </div>
+  <ul class="cart-list" id="cartList"></ul>
+  <div class="cart-foot" id="cartFoot"></div>
+</aside>
+
+<!-- WHATSAPP BUTTON: Its link is built from CONFIG.whatsapp and CONFIG.whatsappMessage in script.js. -->
+<a class="wa" data-wa target="_blank" rel="noopener" aria-label="Chat with us on WhatsApp">
+  <svg class="ic"><use href="#i-whatsapp"/></svg><span class="wa__tip">Chat with us</span>
+</a>
+
+<!-- STATUS MESSAGES: script.js inserts short-lived success or information messages into this container. -->
+<div class="toasts" id="toasts" role="status" aria-live="polite"></div>
+
+<!-- Keep script.js beside this HTML file, or update the path if the script is moved. -->
+<script src="script.js"></script>
+</body>
+</html>
